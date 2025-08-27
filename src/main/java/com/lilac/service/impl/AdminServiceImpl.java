@@ -1,5 +1,7 @@
 package com.lilac.service.impl;
 
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lilac.entity.Admin;
@@ -10,11 +12,15 @@ import com.lilac.enums.HttpsCodeEnum;
 import com.lilac.exception.SystemException;
 import com.lilac.mapper.AdminMapper;
 import com.lilac.service.AdminService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -95,5 +101,34 @@ public class AdminServiceImpl implements AdminService {
         for(Integer id : ids){
             adminMapper.delete(id);
         }
+    }
+
+    /**
+     * 导出管理员信息
+     * @param response HttpServletResponse对象
+     */
+    @Override
+    public void export(HttpServletResponse response) throws IOException {
+        // 查询所有管理员
+        List<Admin> admins = adminMapper.selectAll();
+        // 创建ExcelWriter对象
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        // 写入数据
+        writer.addHeaderAlias("username", "用户名");
+        writer.addHeaderAlias("name", "姓名");
+        writer.addHeaderAlias("phone", "手机号");
+        writer.addHeaderAlias("email", "邮箱");
+        writer.setOnlyAlias(true);
+        writer.write(admins, true);
+        // 设置响应头
+        String filename = URLEncoder.encode("管理员信息", StandardCharsets.UTF_8);
+        // 设置响应类型
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + filename + ".xlsx");
+        // 获取输出流
+        ServletOutputStream os = response.getOutputStream();
+        writer.flush(os);
+        writer.close();
+        os.close();
     }
 }

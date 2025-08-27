@@ -1,12 +1,22 @@
 package com.lilac.controller;
 
+import cn.hutool.poi.excel.ExcelReader;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
 import com.lilac.entity.Admin;
 import com.lilac.entity.DTO.AdminPageDTO;
 import com.lilac.entity.Result;
 import com.lilac.service.AdminService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -71,6 +81,30 @@ public class AdminController {
     @PostMapping("/deleteBatch")
     public Result deleteBatch(@RequestBody List<Integer> ids){
         adminService.deleteBatch(ids);
+        return Result.success();
+    }
+
+    /**
+     * 导出管理员信息
+     * @param response HttpServletResponse
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) throws Exception {
+        adminService.export(response);
+    }
+
+    @PostMapping("/import")
+    public Result importData(MultipartFile file) throws Exception {
+        InputStream inputStream = file.getInputStream();
+        ExcelReader reader = ExcelUtil.getReader(inputStream);
+        reader.addHeaderAlias("用户名","username");
+        reader.addHeaderAlias("姓名", "name");
+        reader.addHeaderAlias("手机号","phone");
+        reader.addHeaderAlias( "邮箱","email");
+        List<Admin> admins = reader.readAll(Admin.class);
+        for (Admin admin : admins){
+            adminService.save(admin);
+        }
         return Result.success();
     }
 }
