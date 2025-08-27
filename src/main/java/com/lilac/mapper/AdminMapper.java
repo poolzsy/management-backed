@@ -25,10 +25,16 @@ public interface AdminMapper {
     List<Admin> selectPage(String name);
 
     /**
-     * 保存管理员
+     * 新增或更新管理员
      * @param admin 管理员
      */
     void save(Admin admin);
+
+    /**
+     * 更新管理员
+     * @param admin 管理员
+     */
+    void update(Admin admin);
 
     /**
      * 删除管理员
@@ -36,4 +42,20 @@ public interface AdminMapper {
      */
     @Delete("delete from admin where id = #{id}")
     void delete(Integer id);
+
+    /**
+     * 新增：根据用户名查询管理员
+     * @param username 用户名
+     * @return Admin
+     */
+    @Select("select * from admin where username = #{username}")
+    Admin findByUsername(String username);
+
+    /**
+     * 新增：根据手机号查询管理员
+     * @param phone 手机号
+     * @return Admin
+     */
+    @Select("select * from admin where phone = #{phone}")
+    Admin findByPhone(String phone);
 }

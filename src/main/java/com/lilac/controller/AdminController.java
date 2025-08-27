@@ -45,6 +45,16 @@ public class AdminController {
     }
 
     /**
+     * 更新管理员
+     * @param admin 管理员信息
+     */
+    @PutMapping("/update")
+    public Result update(@RequestBody Admin admin){
+        adminService.save(admin);
+        return Result.success();
+    }
+
+    /**
      * 删除管理员
      * @param id 管理员ID
      */
@@ -54,6 +64,10 @@ public class AdminController {
         return Result.success();
     }
 
+    /**
+     * 批量删除管理员
+     * @param ids 管理员ID列表
+     */
     @PostMapping("/deleteBatch")
     public Result deleteBatch(@RequestBody List<Integer> ids){
         adminService.deleteBatch(ids);

@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lilac.mapper.AdminMapper">
-    <insert id="save">
-        insert into admin (username,name,phone,email) values (#{username},#{name},#{phone},#{email})
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into admin (username, name, phone, email)
+        values (#{username}, #{name}, #{phone}, #{email})
     </insert>
 
+    <update id="update">
+        update admin
+        <set>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
     <select id="selectPage" resultType="com.lilac.entity.Admin">
-       select * from admin
-       <where>
-           <if test="name != null">
-               name like concat('%',#{name},'%')
-           </if>
-       </where>
-       order by id desc
+        select * from admin
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+        </where>
+        order by id desc
     </select>
 </mapper>
