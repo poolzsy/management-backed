@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lilac.entity.Admin;
 import com.lilac.entity.DTO.AdminPageDTO;
+import com.lilac.entity.DTO.LoginDTO;
 import com.lilac.entity.Result;
 import com.lilac.entity.VO.PageVO;
 import com.lilac.enums.HttpsCodeEnum;
@@ -200,7 +201,7 @@ public class AdminServiceImpl implements AdminService {
         if (!errorMessages.isEmpty()) {
             throw new SystemException(HttpsCodeEnum.BAD_REQUEST, String.join("<br>", errorMessages));
         }
-        // 3. 批量插入数据库
+        // 批量插入数据库
         try {
             adminMapper.saveBatch(adminsToImport);
         } catch (Exception e) {
@@ -209,5 +210,21 @@ public class AdminServiceImpl implements AdminService {
         }
 
         return Result.success("成功导入 " + adminsToImport.size() + " 条数据");
+    }
+
+    /**
+     * 管理员登录
+     * @param loginDTO 登录信息
+     */
+    @Override
+    public Result login(LoginDTO loginDTO) {
+        Admin admin = adminMapper.findByUsername(loginDTO.getUsername());
+        if (admin == null) {
+            throw new SystemException(HttpsCodeEnum.USER_NOT_EXIST);
+        }
+        if (!admin.getPassword().equals(loginDTO.getPassword())) {
+            throw new SystemException(HttpsCodeEnum.USER_PASSWORD_ERROR);
+        }
+        return Result.success(admin);
     }
 }

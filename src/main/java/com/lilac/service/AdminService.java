@@ -2,6 +2,7 @@ package com.lilac.service;
 
 import com.lilac.entity.Admin;
 import com.lilac.entity.DTO.AdminPageDTO;
+import com.lilac.entity.DTO.LoginDTO;
 import com.lilac.entity.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,4 +56,9 @@ public interface AdminService {
      * 导入管理员数据
      */
     Result importData(MultipartFile file) throws IOException;
+
+    /**
+     * 登录
+     */
+    Result login(LoginDTO loginDTO);
 }
