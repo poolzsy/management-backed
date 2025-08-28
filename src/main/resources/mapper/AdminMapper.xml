@@ -35,4 +35,27 @@
         </where>
         order by id desc
     </select>
+
+    <delete id="deleteBatch">
+        delete from admin
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="saveBatch">
+        insert into admin (username, name, phone, email) values
+        <foreach collection="admins" item="admin" separator=",">
+            (#{admin.username}, #{admin.name}, #{admin.phone}, #{admin.email})
+        </foreach>
+    </insert>
+
+    <select id="selectByIds" resultType="com.lilac.entity.Admin">
+        select * from admin
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

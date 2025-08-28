@@ -13,7 +13,7 @@ public enum HttpsCodeEnum {
     USER_PHONE_EXIST(40003, "手机号已存在"),
     USERNAME_PHONE_EMPTY(40004, "用户名和手机号不能为空"),
     NEED_ID(40005, "更新操作必须提供用户ID"),
-    RESOURCE_NOT_FOUND(404, "请求的资源不存在");
+    RESOURCE_NOT_FOUND(404, "请求的资源不存在"),;
 
     private final Integer code;
     private final String message;

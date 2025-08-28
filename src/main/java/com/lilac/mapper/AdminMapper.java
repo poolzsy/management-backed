@@ -3,6 +3,7 @@ package com.lilac.mapper;
 import com.lilac.entity.Admin;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -31,6 +32,12 @@ public interface AdminMapper {
     void save(Admin admin);
 
     /**
+     * 批量保存管理员
+     * @param admins 管理员列表
+     */
+    void saveBatch(@Param("admins") List<Admin> admins);
+
+    /**
      * 更新管理员
      * @param admin 管理员
      */
@@ -44,7 +51,20 @@ public interface AdminMapper {
     void delete(Integer id);
 
     /**
-     * 新增：根据用户名查询管理员
+     * 批量删除管理员
+     * @param ids ID列表
+     */
+    void deleteBatch(@Param("ids") List<Integer> ids);
+
+    /**
+     * 根据ID列表查询管理员
+     * @param ids ID列表
+     * @return 管理员列表
+     */
+    List<Admin> selectByIds(@Param("ids") List<Integer> ids);
+
+    /**
+     * 根据用户名查询管理员
      * @param username 用户名
      * @return Admin
      */
@@ -52,7 +72,7 @@ public interface AdminMapper {
     Admin findByUsername(String username);
 
     /**
-     * 新增：根据手机号查询管理员
+     * 根据手机号查询管理员
      * @param phone 手机号
      * @return Admin
      */

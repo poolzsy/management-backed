@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -85,7 +86,7 @@ public class AdminController {
     }
 
     /**
-     * 导出管理员信息
+     * 导出所有管理员信息
      * @param response HttpServletResponse
      */
     @GetMapping("/export")
@@ -93,18 +94,44 @@ public class AdminController {
         adminService.export(response);
     }
 
+    /**
+     * 导出选中的管理员信息
+     * @param ids ID列表
+     * @param response HttpServletResponse
+     */
+    @PostMapping("/export/selected")
+    public void exportSelected(@RequestBody List<Integer> ids, HttpServletResponse response) throws Exception {
+        adminService.exportSelected(ids, response);
+    }
+
+    /**
+     * 批量导入管理员数据
+     * @param file 上传的Excel文件
+     * @return 导入结果
+     */
     @PostMapping("/import")
     public Result importData(MultipartFile file) throws Exception {
-        InputStream inputStream = file.getInputStream();
-        ExcelReader reader = ExcelUtil.getReader(inputStream);
-        reader.addHeaderAlias("用户名","username");
-        reader.addHeaderAlias("姓名", "name");
-        reader.addHeaderAlias("手机号","phone");
-        reader.addHeaderAlias( "邮箱","email");
-        List<Admin> admins = reader.readAll(Admin.class);
-        for (Admin admin : admins){
-            adminService.save(admin);
+        return adminService.importData(file);
+    }
+
+    /**
+     * 提供Excel模板下载
+     */
+    @GetMapping("/import/template")
+    public void downloadTemplate(HttpServletResponse response) throws IOException {
+        // 创建一个内存中的Excel
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        // 定义表头
+        writer.writeRow(Arrays.asList("用户名", "姓名", "手机号", "邮箱"));
+
+        // 设置响应头
+        String filename = URLEncoder.encode("管理员导入模板", StandardCharsets.UTF_8);
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + filename + ".xlsx");
+        try (ServletOutputStream os = response.getOutputStream()) {
+            writer.flush(os, true);
+        } finally {
+            writer.close();
         }
-        return Result.success();
     }
 }

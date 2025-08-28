@@ -4,6 +4,7 @@ import com.lilac.entity.Admin;
 import com.lilac.entity.DTO.AdminPageDTO;
 import com.lilac.entity.Result;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,4 +45,14 @@ public interface AdminService {
      * 导出管理员数据
      */
     void export(HttpServletResponse response) throws IOException;
+
+    /**
+     * 导出选中的管理员数据
+     */
+    void exportSelected(List<Integer> ids, HttpServletResponse response) throws IOException;
+
+    /**
+     * 导入管理员数据
+     */
+    Result importData(MultipartFile file) throws IOException;
 }

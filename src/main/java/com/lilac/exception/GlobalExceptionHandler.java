@@ -3,7 +3,9 @@ package com.lilac.exception;
 import com.lilac.entity.Result;
 import com.lilac.enums.HttpsCodeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -16,6 +18,7 @@ public class GlobalExceptionHandler {
      * @return Result
      */
     @ExceptionHandler(SystemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<Void> handleSystemException(SystemException e) {
         log.warn("业务异常: code={}, message={}", e.getCode(), e.getMessage());
         return Result.error(e.getCode(), e.getMessage());
