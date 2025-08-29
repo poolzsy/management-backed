@@ -1,5 +1,6 @@
 package com.lilac.mapper;
 
+import com.lilac.entity.Account;
 import com.lilac.entity.Admin;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -78,4 +79,12 @@ public interface AdminMapper {
      */
     @Select("select * from admin where phone = #{phone}")
     Admin findByPhone(String phone);
+
+    /**
+     * 根据用户ID查询用户
+     * @param id 用户ID
+     * @return 用户
+     */
+    @Select("select * from admin where id = #{id}")
+    Account selectById(String id);
 }

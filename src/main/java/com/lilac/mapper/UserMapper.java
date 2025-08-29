@@ -1,5 +1,6 @@
 package com.lilac.mapper;
 
+import com.lilac.entity.Account;
 import com.lilac.entity.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -64,4 +65,10 @@ public interface UserMapper {
      */
     @Select("select * from user where phone = #{phone}")
     User findByPhone(String phone);
+
+    /**
+     * 根据id查询用户
+     */
+    @Select("select * from user where id = #{id}")
+    Account selectById(String id);
 }

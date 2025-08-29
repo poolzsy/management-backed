@@ -15,6 +15,7 @@ public enum HttpsCodeEnum {
     NEED_ID(40005, "更新操作必须提供用户ID"),
     USER_NOT_EXIST(40006, "该用户不存在"),
     USER_PASSWORD_ERROR(40007, "用户密码或错误"),
+    USER_NOT_LOGIN(401, "未授权"),
     RESOURCE_NOT_FOUND(404, "请求的资源不存在");
 
     private final Integer code;

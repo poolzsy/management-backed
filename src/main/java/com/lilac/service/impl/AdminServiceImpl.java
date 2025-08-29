@@ -14,6 +14,7 @@ import com.lilac.enums.HttpsCodeEnum;
 import com.lilac.exception.SystemException;
 import com.lilac.mapper.AdminMapper;
 import com.lilac.service.AdminService;
+import com.lilac.utils.JwtUtils;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -230,6 +231,18 @@ public class AdminServiceImpl implements AdminService {
         if (!admin.getPassword().equals(account.getPassword())) {
             throw new SystemException(HttpsCodeEnum.USER_PASSWORD_ERROR);
         }
+        String token = JwtUtils.createToken(admin.getId() + "-" + admin.getRole(), admin.getPassword());
+        admin.setToken(token);
         return admin;
+    }
+
+    /**
+     * 根据用户ID查询用户信息
+     * @param userId 用户ID
+     * @return 用户信息
+     */
+    @Override
+    public Account selectById(String userId) {
+        return adminMapper.selectById(userId);
     }
 }

@@ -21,4 +21,5 @@ public class Account {
     private String email;
     //角色
     private String role;
+    private String token;
 }

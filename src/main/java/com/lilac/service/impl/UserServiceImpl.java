@@ -15,6 +15,7 @@ import com.lilac.enums.HttpsCodeEnum;
 import com.lilac.exception.SystemException;
 import com.lilac.mapper.UserMapper;
 import com.lilac.service.UserService;
+import com.lilac.utils.JwtUtils;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.BeanUtils;
@@ -238,6 +239,8 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().equals(account.getPassword())) {
             throw new SystemException(HttpsCodeEnum.USER_PASSWORD_ERROR);
         }
+        String token = JwtUtils.createToken(user.getId() + "-" + user.getRole(), user.getPassword());
+        user.setToken(token);
         return user;
     }
 
@@ -252,5 +255,15 @@ public class UserServiceImpl implements UserService {
         user.setPassword(registerDTO.getPassword());
         save(user);
         return Result.success();
+    }
+
+    /**
+     * 根据用户ID查询用户信息
+     * @param userId 用户ID
+     * @return 用户信息
+     */
+    @Override
+    public Account selectById(String userId) {
+        return userMapper.selectById(userId);
     }
 }

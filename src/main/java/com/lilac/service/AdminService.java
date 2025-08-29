@@ -61,4 +61,9 @@ public interface AdminService {
      * 登录
      */
     Account login(Account account);
+
+    /**
+     * 根据ID查询管理员
+     */
+    Account selectById(String userId);
 }

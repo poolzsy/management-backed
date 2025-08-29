@@ -61,4 +61,9 @@ public interface UserService {
      * 注册
      */
     Result register(RegisterDTO registerDTO);
+
+    /**
+     * 根据id查询用户
+     */
+    Account selectById(String userId);
 }

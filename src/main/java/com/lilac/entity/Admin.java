@@ -22,6 +22,7 @@ public class Admin extends Account{
     private String email;
     //角色
     private String role;
+    private String token;
 
 }
 
