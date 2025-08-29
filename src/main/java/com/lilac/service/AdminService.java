@@ -1,8 +1,8 @@
 package com.lilac.service;
 
+import com.lilac.entity.Account;
 import com.lilac.entity.Admin;
 import com.lilac.entity.DTO.AdminPageDTO;
-import com.lilac.entity.DTO.LoginDTO;
 import com.lilac.entity.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,5 +60,5 @@ public interface AdminService {
     /**
      * 登录
      */
-    Result login(LoginDTO loginDTO);
+    Account login(Account account);
 }

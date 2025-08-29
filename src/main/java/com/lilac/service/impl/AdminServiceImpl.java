@@ -5,9 +5,9 @@ import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lilac.entity.Account;
 import com.lilac.entity.Admin;
 import com.lilac.entity.DTO.AdminPageDTO;
-import com.lilac.entity.DTO.LoginDTO;
 import com.lilac.entity.Result;
 import com.lilac.entity.VO.PageVO;
 import com.lilac.enums.HttpsCodeEnum;
@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -64,6 +65,10 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void save(Admin admin) {
         checkUniqueness(admin);
+        admin.setRole("admin");
+        if(!StringUtils.hasText(admin.getPassword())){
+            admin.setPassword("123456");
+        }
         if (admin.getId() == null) {
             adminMapper.save(admin);
         } else {
@@ -214,17 +219,17 @@ public class AdminServiceImpl implements AdminService {
 
     /**
      * 管理员登录
-     * @param loginDTO 登录信息
+     * @param account 登录信息
      */
     @Override
-    public Result login(LoginDTO loginDTO) {
-        Admin admin = adminMapper.findByUsername(loginDTO.getUsername());
+    public Account login(Account account) {
+        Admin admin = adminMapper.findByUsername(account.getUsername());
         if (admin == null) {
             throw new SystemException(HttpsCodeEnum.USER_NOT_EXIST);
         }
-        if (!admin.getPassword().equals(loginDTO.getPassword())) {
+        if (!admin.getPassword().equals(account.getPassword())) {
             throw new SystemException(HttpsCodeEnum.USER_PASSWORD_ERROR);
         }
-        return Result.success(admin);
+        return admin;
     }
 }

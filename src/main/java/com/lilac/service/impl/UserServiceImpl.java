@@ -5,8 +5,8 @@ import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lilac.entity.Admin;
-import com.lilac.entity.DTO.LoginDTO;
+import com.lilac.entity.Account;
+import com.lilac.entity.DTO.RegisterDTO;
 import com.lilac.entity.DTO.UserPageDTO;
 import com.lilac.entity.Result;
 import com.lilac.entity.User;
@@ -17,9 +17,11 @@ import com.lilac.mapper.UserMapper;
 import com.lilac.service.UserService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -65,6 +67,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         checkUniqueness(user);
+        user.setRole("user");
+        if(!StringUtils.hasText(user.getPassword())){
+            user.setPassword("123456");
+        }
+        if(!StringUtils.hasText(user.getName())){
+            user.setName(user.getUsername());
+        }
         if (user.getId() == null) {
             userMapper.save(user);
         } else {
@@ -218,17 +227,30 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 登录
-     * @param loginDTO 登录信息
+     * @param account 登录信息
      */
     @Override
-    public Result login(LoginDTO loginDTO) {
-        User user = userMapper.findByUsername(loginDTO.getUsername());
+    public Account login(Account account) {
+        User user = userMapper.findByUsername(account.getUsername());
         if (user == null) {
             throw new SystemException(HttpsCodeEnum.USER_NOT_EXIST);
         }
-        if (!user.getPassword().equals(loginDTO.getPassword())) {
+        if (!user.getPassword().equals(account.getPassword())) {
             throw new SystemException(HttpsCodeEnum.USER_PASSWORD_ERROR);
         }
-        return Result.success(user);
+        return user;
+    }
+
+    /**
+     * 注册
+     * @param registerDTO 注册信息
+     */
+    @Override
+    public Result register(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setUsername(registerDTO.getUsername());
+        user.setPassword(registerDTO.getPassword());
+        save(user);
+        return Result.success();
     }
 }

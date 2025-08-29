@@ -1,6 +1,7 @@
 package com.lilac.service;
 
-import com.lilac.entity.DTO.LoginDTO;
+import com.lilac.entity.Account;
+import com.lilac.entity.DTO.RegisterDTO;
 import com.lilac.entity.DTO.UserPageDTO;
 import com.lilac.entity.Result;
 import com.lilac.entity.User;
@@ -54,5 +55,10 @@ public interface UserService {
     /**
      * 登录
      */
-    Result login(LoginDTO loginDTO);
+    Account login(Account account);
+
+    /**
+     * 注册
+     */
+    Result register(RegisterDTO registerDTO);
 }

@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Admin extends Account{
-
+public class Account {
     private Integer id;
     //用户名
     private String username;
@@ -22,6 +21,4 @@ public class Admin extends Account{
     private String email;
     //角色
     private String role;
-
 }
-
