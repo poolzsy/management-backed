@@ -24,6 +24,7 @@ public class User extends Account{
     //角色
     private String role;
     private String token;
+    private String avatar;
 
 }
 

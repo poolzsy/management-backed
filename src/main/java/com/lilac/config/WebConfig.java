@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/admin/export","/user/export")
                 .excludePathPatterns("/admin/export/selected","/user/export/selected")
                 .excludePathPatterns("/admin/import","/user/import")
-                .excludePathPatterns("/admin/import/template","/user/import/template");
+                .excludePathPatterns("/admin/import/template","/user/import/template")
+                .excludePathPatterns("/file/download/**");
     }
 
     @Bean

@@ -3,8 +3,8 @@
 <mapper namespace="com.lilac.mapper.AdminMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into admin (username, password, name, phone, email, role)
-        values (#{username}, #{password}, #{name}, #{phone}, #{email}, #{role})
+        insert into admin (username, password, name, phone, email, role, avatar)
+        values (#{username}, #{password}, #{name}, #{phone}, #{email}, #{role}, #{avatar})
     </insert>
 
     <update id="update">
@@ -24,6 +24,9 @@
             </if>
             <if test="role != null">
                 role = #{role},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
             </if>
         </set>
         where id = #{id}
@@ -48,9 +51,9 @@
     </delete>
 
     <insert id="saveBatch">
-        insert into admin (username, name, phone, email, role) values
+        insert into admin (username, name, phone, email, role, avatar) values
         <foreach collection="admins" item="admin" separator=",">
-            (#{admin.username}, #{admin.name}, #{admin.phone}, #{admin.email}, #{admin.role})
+            (#{admin.username}, #{admin.name}, #{admin.phone}, #{admin.email}, #{admin.role}, #{admin.avatar})
         </foreach>
     </insert>
 

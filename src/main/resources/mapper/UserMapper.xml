@@ -3,8 +3,8 @@
 <mapper namespace="com.lilac.mapper.UserMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into user (username,password, name, phone, email, role)
-        values (#{username}, #{password}, #{name}, #{phone}, #{email}, #{role})
+        insert into user (username,password, name, phone, email, role, avatar)
+        values (#{username}, #{password}, #{name}, #{phone}, #{email}, #{role}, #{avatar})
     </insert>
 
     <update id="update">
@@ -24,6 +24,9 @@
             </if>
             <if test="role != null">
                 role = #{role},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
             </if>
         </set>
         where id = #{id}
@@ -48,9 +51,9 @@
     </delete>
 
     <insert id="saveBatch">
-        insert into user (username, name, phone, email, role) values
+        insert into user (username, name, phone, email, role, avatar) values
         <foreach collection="users" item="user" separator=",">
-            (#{user.username}, #{user.name}, #{user.phone}, #{user.email}, #{user.role})
+            (#{user.username}, #{user.name}, #{user.phone}, #{user.email}, #{user.role}, #{user.avatar})
         </foreach>
     </insert>
 
